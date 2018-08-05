@@ -1,0 +1,197 @@
+<div class="">
+  <div class="row">
+    <div class="col s12 m12 l12 login-background">
+
+      <!-- Your content here -->
+
+
+    <div class="col s12 m12 l12 login" >
+        <div class="header">
+            <img  [src]="'assets/img/logo-hourgantt.png'" alt="">
+            <h1>HouraGantt</h1>
+        </div>
+
+        <ng-container *ngIf="!createAccount">
+
+
+        <div class="row">
+            <form [formGroup]="formLogin" class="col s12 z-depth-2" (ngSubmit)="logUser(formLogin.value)" >
+
+                <!-- Email -->
+                <div class="row">
+                    <div class="input-field col s12">
+                        <input id="email" type="email" class="validate form-control" name="emailCtrl" formControlName="emailCtrl" >
+
+                        <!-- Validator -->
+                        <div *ngIf="emailCtrl.invalid && (emailCtrl.dirty || emailCtrl.touched)" class="">
+
+                            <div *ngIf="emailCtrl.errors.required" class="fieldInvalid">
+                                Merci de saisir votre adresse email.
+                            </div>
+
+                            <div *ngIf="emailCtrl.errors.pattern" class="fieldInvalid">
+                                Adresse email incorrect.
+                            </div>
+                        </div>
+
+                        <label for="email">Email</label>
+                    </div>
+                </div>
+
+                <!-- password -->
+                <div class="row">
+                    <div class="input-field col s12">
+                        <input id="password" type="password" class="validate form-control" name="password" formControlName="passwordLoginCtrl" >
+                        <label for="password">Password</label>
+
+                        <!-- Validators -->
+                        <div *ngIf="passwordLoginCtrl.invalid && (passwordLoginCtrl.dirty || passwordLoginCtrl.touched)" class="">
+
+                            <div *ngIf="passwordLoginCtrl.errors.required" class="fieldInvalid">
+                                Merci de saisir votre mot de passe.
+                            </div>
+                        </div>
+                        <!-- fin validators -->
+
+                    </div>
+
+                </div>
+                <div class="grpbtn">
+                        <button type="submit" class="btn btn-primary" [disabled]="!formLogin.valid">Sign in</button>
+                        <button class="btn btn-primary btnSignUp" (click)="switchView(true)">Sign up</button>
+                </div>
+
+
+            </form>
+
+
+        </div>
+        <div>
+        </div>
+        </ng-container>
+
+
+
+    <!-- CREATE ACCOUNT -->
+    <ng-container *ngIf="createAccount" >
+
+        <!-- <div class="col s12 m12 l12 formRegister "> -->
+            <div class="row scale-transition">
+                <form class="col s12 z-depth-2" [formGroup]="formRegister" (ngSubmit)="createUser(formRegister.value)">
+
+                    <!-- NAME -->
+                    <div class="row">
+                        <div class="input-field col s6">
+                            <input id="name" type="text" class="validate form-control" name="name" formControlName="nameCtrl">
+                            <!-- VALIDATORS -->
+                            <div *ngIf="nameCtrl.invalid && (nameCtrl.dirty || nameCtrl.touched)" >
+
+
+                                <div *ngIf="nameCtrl.errors.required " class="fieldInvalid">
+                                    Merci de saisir votre prénom.
+
+                                </div>
+
+
+                            </div>
+                            <!-- END VALIDATORS -->
+                            <label for="first_name">Prénom</label>
+                        </div>
+
+                        <!-- LAST NAME -->
+                        <div class="input-field col s6">
+                            <input id="last_name" type="text" class="validate form-control" name="last_name" formControlName="last_nameCtrl">
+                            <!-- VALIDATORS -->
+                            <div *ngIf="last_nameCtrl.invalid && (last_nameCtrl.dirty || last_nameCtrl.touched)" >
+                                <div *ngIf="last_nameCtrl.errors.required" class="fieldInvalid">
+                                    Merci de saisir votre nom.
+                                </div>
+                            </div>
+                            <!-- END VALIDATORS -->
+                            <label for="last_name">Nom</label>
+                        </div>
+                    </div>
+
+                    <!-- PASSWORD -->
+                    <div class="row">
+                        <div class="input-field col s12">
+                            <input id="password" type="password" class="validate form-control" name="password" formControlName="passwordCtrl">
+                            <!-- VALIDATORS -->
+                            <div *ngIf="passwordCtrl.invalid && (passwordCtrl.dirty || passwordCtrl.touched)" >
+                                <div *ngIf="passwordCtrl.errors.required" class="fieldInvalid">
+                                    Le mot de passe est obligatoire.
+                                </div>
+
+                                <div *ngIf="passwordCtrl.errors.pattern" class="fieldInvalid">
+                                       8 caracteres minimum, 1 chiffre et 1 majuscule
+                                </div>
+                            </div>
+                            <!-- END VALIDATORS -->
+                            <label for="password">Password</label>
+                        </div>
+                    </div>
+
+
+                    <!-- EMAIL -->
+                    <div class="row">
+                        <div class="input-field col s12">
+                            <input id="email" type="email" class="validate form-control" name="email" formControlName="emailCtrl">
+
+                            <label for="email">Email</label>
+
+                            <div *ngIf="emailCtrl.invalid && (emailCtrl.dirty || emailCtrl.touched)" >
+
+                                <div *ngIf="emailCtrl.errors.required" class="fieldInvalid">
+                                    Merci de saisir votre adresse email.
+                                </div>
+
+                                <div *ngIf="emailCtrl.errors.pattern" class="fieldInvalid">
+                                    Adresse email incorrect.
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <!-- RGPG -->
+                     <div class="row accept-rgpd">
+                        <div class="input-field col s12">
+                            <p>
+                                <input type="checkbox" class="filled-in validate form-control" id="rgpg_check" name="rgpg_check" (click)="checkedBox()" formControlName="rgpdCtrl"/>
+                                <label for="rgpg_check"><span>J'accepte les conditions RGPD ?</span></label>
+                            </p>
+                            <p>
+                                <span><a href="https://www.cnil.fr/fr/rgpd-exemples-de-mentions-dinformation" target="_blank">Enfin, je vais quand même les lire avant</a></span>
+                            </p>
+                            <div *ngIf="rgpdCtrl.invalid" >
+                                <div *ngIf="rgpdCtrl.errors.required" class="fieldUnset">
+                                    Vous devez accepter les conditions RGPD pour vous inscrire.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="grpbtn">
+                            <button class="btn waves-effect waves-light" type="submit" [disabled]="!formRegister.valid">Creer un compte</button>
+                            <button class="btn btn-primary btnSignUp" (click)="switchView(false)">Back</button>
+                    </div>
+
+
+            </form>
+        </div>
+
+
+</ng-container>
+
+</div>
+
+
+
+
+
+
+  </div>
+
+</div>
+

@@ -1,0 +1,174 @@
+<!-- pdf.blade.php -->
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Export statistics {{ date('Y_m_j') }}</title>
+    <link rel="stylesheet" href=" {{ public_path() . '/css/report.css' }} ">
+    <link rel="stylesheet" type="text/css" href=" {{ storage_path() . '/fonts/fontawesome/svgs/brands' }} ">
+    <link rel="stylesheet" type="text/css" href=" {{ storage_path() . '/fonts/fontawesome/svgs/solid' }} ">
+    <link rel="stylesheet" type="text/css" href=" {{ storage_path() . '/fonts/fontawesome/svgs/regular' }} ">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/all.css" integrity="sha384-hWVjflwFxL6sNzntih27bfxkr27PmbbK/iSvJ+a4+0owXq79v+lsFkW54bOGbiDQ" crossorigin="anonymous">
+    <style type="text/css">
+      body {
+        font-family: sans-serif;
+        margin: 0;
+        padding: 0;
+      }
+      table {
+        width: 650px;
+      }
+      th {
+        text-align: justify;
+      }
+      tr.first-tr {
+        height: 50px;
+      }
+      td.additional_cost {
+        background-color: #ff8a65;
+        padding: 7px;
+        text-align: center;
+        color: white;
+        border-radius: 5px;
+        width: 100px;
+      }
+      div#title {
+        height: 350px;
+        background-image: url(http://localhost:4200/login-bg2.jpg);
+        background-repeat: no-repeat;
+        background-attachment: local; 
+        background-position: 0% 80%;
+        background-size: 100% auto;
+      }
+      div#bordered-title {
+        border: #0097a7 5px solid;
+        height: 20%;
+        color: #0097a7;
+        padding: 50px;
+        margin: 50px auto 0 auto;
+      }
+      div#bordered-title p {
+        font-size: 2em;
+        margin: 20px;
+      }
+      div.project-info {
+        color: #0097a7;
+        text-align: center;
+        padding-top: 20px;
+      }
+      section#numbers {
+        padding-top: 50px;
+        padding-bottom: 50px;
+      }
+      section#resources {
+        background-color: #0097a7;
+        padding: 20% 5% 10% 5%;
+        color: white;
+      }
+      section#tasks {
+        padding: 12% 5% 10% 5%;
+      }
+      div.resources-content {
+        width: 350px;
+      }
+      p.resource-title {
+        font-size: 2em;
+        background-color: #00bcd4;
+        padding: 17px;
+        margin-top: 0;
+        box-shadow: -4px 1px 16px -15px #006064;
+      }
+      span.ratio {
+        margin-right: 45px;
+        color: #00bcd4;
+        font-weight: bold;
+      }
+      .illustrate {
+        font-size: 19em;
+      }
+      .flex {
+        display: flex;
+        flex-wrap: nowrap;
+        justify-content: space-between; 
+      }
+      .flex-around {
+        display: flex;
+        flex-wrap: nowrap;
+        justify-content: space-around;
+      }
+      .dicret {
+        font-size: 0.7em;
+        color: white;
+        position: absolute;
+        top: 332px;
+        left: 8px;
+      }
+      .no-style {
+        text-decoration: none;
+        list-style: none;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="title" class="flex">
+      <div id="bordered-title">
+        <p>{{ $project->data->name }}</p>
+      </div>
+    </div>
+
+    <section id="project">
+      <div class="project-info">
+        <ul class="no-style">
+          <li>Duration : {{ $project->data->duration_days }} days</li>
+          <li>Creation date : {{ $project->data->created_at }} </li>
+          @if($project->data->description)
+          <li>Description : {{ $project->data->description }} </li>
+          @endif
+        </ul>
+      </div>
+    </section>
+
+    <section id="numbers">
+      <ul class="no-style">
+        <li><p>Cost :  {{ $project->total_cost }} EUR</p></li>
+        <li><p>{{$project->how_many_resources}} RESOURCE(S)</p></li>
+        <li><p>{{$project->how_many_tasks}} TASK(S)</p></li>
+      </ul>
+    </section>
+
+    <section id="resources">
+          @if($project->data->resources)
+          <p class="resource-title">Resources</p>
+          <ul class="no-style">
+            <li><span class="ratio">ratio</span>name</li>
+            @foreach($project->data->resources as $resource)
+            <li><span class="ratio">{{$resource->ratio}}  </span> {{$resource->name}} @if($resource->job) as a {{ $resource->job }} @endif</li>
+            @endforeach
+          </ul>
+          @endif
+    </section>
+
+    <section id="tasks">
+      @if($project->data->tasks)
+      <table>
+        <tr class="first-tr">
+          <th></th>
+          <th>From to</th>
+          <th>Name</th>
+          <th>Additional cost</th>
+        </tr>
+        @foreach($project->data->tasks as $task)
+        <tr>
+          <td><i class="far fa-calendar-alt"></i></td>
+          <td> {{ $task->start_date }} <br>-><br> {{ $task->ends_at }} </td>
+          <td> {{ $task->text }} </td>
+          <td class="additional_cost"> {{ $task->additional_cost }} </td>
+        </tr>
+        @endforeach
+      </table>
+      @endif
+    </section>
+    <p>Document generated by HouraGANTT application - {{ date('Y-m-d') }}</p>
+  </body>
+</html>

@@ -1,0 +1,123 @@
+
+  <nav>
+      <div class="nav-wrapper">
+        <a class="brand-logo">
+          <div class="logoHouragantt"></div>
+          Houragantt</a>
+        <ul class="right hide-on-med-and-down">
+  
+
+          <li>
+              <select #selectProject class="browser-default" (change)="dashboard.selectProject(selectProject.value)">
+                  <option value="" disabled selected>Choose your project</option>
+
+                  <ng-container *ngFor="let project of dashboard.projectsUser">
+                    <option id="{{project.id}}" value="{{project.id}}" >{{project.name}}</option>
+                  </ng-container>
+
+                </select>
+
+          </li>
+          <li id="chooseView">
+            <div>
+            <a><i class="material-icons tooltipped"   materialize="tooltip" data-position="bottom" data-delay="200" data-tooltip="Calendrier Gantt" >today</i></a>
+            <a id="day"   (click)="UpdateViewCalendar('day')" class="">day</a>
+            <a id="month" (click)="UpdateViewCalendar('month')"class="selected">month</a>
+            <a id="years" (click)="UpdateViewCalendar('year')" class="">years</a>
+            </div>
+          </li>
+
+          <li id="chooseView">
+              <div>
+              <a><i class="material-icons tooltipped"   materialize="tooltip" data-position="bottom" data-delay="200" data-tooltip="Changer de vue">trending_up</i></a>
+              <a id="gantt"   (click)="UpdateViewCalendar('gantt')" class="selected">Gantt</a>
+              <a id="sprint" (click)="UpdateViewCalendar('sprint')"class="">Sprint</a>
+              </div>
+          </li>
+
+
+          <!-- <li><a href="badges.html"><i class="material-icons">view_module</i></a></li>
+          <li><a href="collapsible.html"><i class="material-icons">refresh</i></a></li>
+          <li><a href="mobile.html"><i class="material-icons">more_vert</i></a></li> -->
+          <li><a materialize="dropdown" class="dropdown-trigger"  data-activates="dropdown1">{{DataProfil.first_name}}<i class="material-icons right">arrow_drop_down</i></a>
+          </li>
+        </ul>
+      </div>
+    </nav>
+
+
+
+      <!-- Dropdown Structure -->
+      <ul id="dropdown1" class="dropdown-content">
+          <li><a class="modal-trigger" href="#modalProfil" (click)="openModalProfil()">Profile</a></li>
+          <li><a href="#!">Setting</a></li>
+          <li class="divider"></li>
+          <li><a (click)="logout()">Logout</a></li>
+      </ul>
+    <!-- <div class="filterGantt">
+        <div class="btn-group" role="group" >
+          <a id="day"   (click)="UpdateViewCalendar('day')" class="btn-inactive">Day</a>
+          <a id="month" (click)="UpdateViewCalendar('month')"class="" >Month</a>
+          <a id="years" (click)="UpdateViewCalendar('year')" class="btn-inactive">Years</a>
+        </div>
+      </div> -->
+
+<!-- Dropdown Structure -->
+<!-- <ul id='dropdown1' class='dropdown-content'>
+
+    <li><a id="day"   (click)="UpdateViewCalendar('day')" class="">Day</a></li>
+    <li><a id="month" (click)="UpdateViewCalendar('month')"class="" >Month</a></li>
+    <li><a id="years" (click)="UpdateViewCalendar('year')" class="">Years</a></li>
+</ul> -->
+
+
+<div id="modalProfil" class="modal modal-fixed-footer" materialize="modal" [materializeParams]="[{dismissible: false}]" [materializeActions]="modalActionsProfil">
+
+    <div class="modal-content">
+
+        <div class="col s6 m6 l6 formRegister ">
+          <div class="row">
+            <div class="input-field col s12">
+              <input id="first_name" placeholder="last_name" type="text" class="validate" [(ngModel)]="DataProfil.first_name" name="first_name" required>
+              <label for="first_name">first_name</label>
+            </div>
+            <div *ngIf="first_name_required" class="fieldInvalid">
+              first_name peut pas etre nul
+            </div>
+          </div>
+          <div class="row">
+            <div class="input-field col s12">
+              <input id="last_name" placeholder="last_name" type="text" class="validate" [(ngModel)]="DataProfil.last_name" name="last_name">
+              <label for="last_name">last_name</label>
+            </div>
+          </div>
+          <div class="row">
+            <div class="input-field col s12">
+              <input id="email" disabled placeholder="email" type="email" class="validate" [(ngModel)]="DataProfil.email" name="email">
+              <label for="last_name">email</label>
+            </div>
+          </div>
+          <div class="row">
+            <div class="input-field col s12">
+              <input id="password" placeholder="password" type="password" class="validate" [(ngModel)]="DataProfil.password" name="password">
+              <label for="password">password</label>
+            </div>
+            <div *ngIf="password_valid" class="fieldInvalid">
+             mot de passe doit contenir une Maj, 8 character et un chiffre
+            </div>
+          </div>
+        </div>
+
+      </div>
+      <div class="modal-footer">
+        <a class="waves-effect waves-green btn-flat" (click)="deleteData()">Supprimer</a>
+        <a class="waves-effect waves-green btn-flat" (click)="Mydata()">Mes données</a>
+
+        <button class="btn waves-effect waves-light" (click)="saveProfile()">
+              Enregistrer
+            </button>
+        <a class="waves-effect waves-green btn-flat" (click)="closeModalProfil()">annuler</a>
+        <!-- <a class="modal-action modal-close waves-effect waves-green btn-flat">Agree</a> -->
+
+      </div>
+    </div>

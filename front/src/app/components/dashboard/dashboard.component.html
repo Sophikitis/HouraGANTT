@@ -1,0 +1,187 @@
+<app-toolbar></app-toolbar>
+
+
+<ng-container
+  *ngIf="ressources.btnRessourcesClicked; then viewRessources; else viewGantt">
+</ng-container>
+
+<ng-template #viewRessources>
+      <div id="offer" class="container ">
+        <div class="z-depth-2 valign-wrapper center-align pad">
+          <div class="head">
+              <h4>Accessible sur la version pro</h4>
+              <!-- <a class="waves-effect waves-light btn" ><i class="material-icons left">euro_symbol</i>Acheter</a> -->
+              <a class="waves-effect waves-light btn" href="https://media.giphy.com/media/j3x5hjUoXIesM/giphy.gif" target="_blank"><i class="material-icons left">euro_symbol</i>Acheter</a>
+          </div>
+           
+          <div class="divider" style=""></div>
+
+           
+
+
+            <div class="listFunctions">
+              <ul>
+                <li>Projet illimité</li>
+                <li>Choix theme gant</li>
+                <li>Feature supplémentaire Gantt</li>
+                <li>Gestion des ressources approfondie</li>
+                <li>Mode nuit</li>
+                <li>Archivage de projet</li>
+              </ul>
+            </div>
+
+        </div>
+
+       </div>
+</ng-template>
+<ng-template #viewGantt>
+  <ng-container *ngIf="dashboard.selectedProject">
+      <app-gantt></app-gantt>
+      <app-ressources></app-ressources>
+      
+  </ng-container>
+
+  <ng-container *ngIf="!dashboard.selectedProject">
+    <ng-container *ngIf="dashboard.projectsUser.length < 1">
+      <div class="row fond">
+        <div class="col s6 offset-s3 inner">
+          <div class="card">
+            <div class="card-image">
+              <img [src]="'assets/img/see2.jpg'">
+              <span class="card-title">Pas de projet dans la vie ?</span>
+            </div>
+            <div class="card-content">
+              <p><i>"Il n'est jamais trop tard" "Il faut bien commencer quelquepart " "Mieux vaut tard que jamais"</i></p>
+            </div>
+            <div class="card-action">
+              <a class="modal-trigger" href="#modal1" (click)="openModal()">MON PREMIER PROJET</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </ng-container>
+    <ng-container *ngIf="dashboard.projectsUser.length > 0">
+      <div class="row fond">
+        <div class="col s6 offset-s3 inner">
+          <div class="card">
+            <div class="card-image">
+              <img [src]="'assets/img/see1.jpg'">
+              <span class="card-title">Vous nous aviez manqué !</span>
+            </div>
+            <div class="card-content">
+              <p>Dès que vous vous sentez prêt, reprenez vos projets dans la liste au dessus. Seulement quand vous vous sentirez prêt.</p>
+            </div>
+            <div class="card-action">
+              <a class="modal-trigger" href="#modal1" (click)="openModal()">OU RECREEZ-EN UN !</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </ng-container>
+  </ng-container>
+
+</ng-template>
+
+
+<!-- Modal Add Project -->
+<div id="modal1" class="modal modal-fixed-footer" materialize="modal" [materializeParams]="[{dismissible: false}]" [materializeActions]="modalActions">
+
+<div class="modal-content">
+    <h4>Creation d'un nouveau projet</h4>
+    <div class="col s6 m6 l6 formRegister ">
+      <div class="row">
+        <form id="requestCreateProject" class="col s12" [formGroup]="formAddProject" (ngSubmit)="createProject(formAddProject.value)">
+          <div class="row">
+            <div class="input-field col s12">
+              <input type="text" id="name" class="validate form-control" name="name" formControlName="nameCtrl">
+              <label for="name">Nom du projet</label>
+              <!-- Validators -->
+              <div *ngIf="nameCtrl.invalid && (nameCtrl.dirty|| nameCtrl.touched)">
+                <div *ngIf="nameCtrl.errors.required">
+                  votre nom est obligatoire
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="input-field col s12">
+              <input type="text" id="description" class="validate form-control" name="description" formControlName="descriptionCtrl">
+              <label for="description">description du projet</label>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="input-field col s12">
+              <input type="text" id="duration_days" class="validate form-control" name="duration_days" formControlName="duration_daysCtrl">
+              <label for="duration_days">Durée du projet</label>
+
+              <!-- Validators -->
+              <div *ngIf="duration_daysCtrl.invalid && (duration_daysCtrl.dirty|| duration_daysCtrl.touched)">
+                <div *ngIf="duration_daysCtrl.errors.required">
+                  Une durée est obligatoire
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="input-field col s12">
+              <input type="text" id="links" class="validate form-control" name="links" formControlName="linksCtrl">
+              <label for="links">Lien du projet</label>
+
+
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+
+  </div>
+  <div class="modal-footer">
+      <button class="btn waves-effect waves-light" form="requestCreateProject" type="submit" [disabled]="formAddProject.invalid">
+          Creer un projet
+        </button>
+    <a class="waves-effect waves-green btn-flat" (click)="closeModal()">annuler</a>
+    <!-- <a class="modal-action modal-close waves-effect waves-green btn-flat">Agree</a> -->
+
+  </div>
+</div>
+
+
+
+
+<!-- TODO : A SUPPRIMER -->
+<!-- <app-ressources></app-ressources>
+<app-gantt></app-gantt> -->
+<!-- <div class="gantt-container">
+  <div>
+    <input type="button" value="Export to MS Project"  (click)="onExportClick()"/>
+  </div>
+  <div #gantt_here class="gantt-container-inner"npm >
+  </div>
+
+</div> -->
+
+
+<!-- A BOUGER DANS FICHIER SCSS -->
+<style>
+
+    #modal1 .modal-content {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    background-color: whitesmoke;
+    min-height: 100%
+  }
+
+  #modal1 .modal-content h4{
+    font-weight: 200;}
+
+  #modal1 .modal-content .formRegister  {
+    width: 80%;
+  }
+
+</style>
+

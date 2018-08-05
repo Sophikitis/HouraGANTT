@@ -1,0 +1,318 @@
+
+<table class="striped responsive-table ">
+    <thead id="tabRes">
+      <tr>
+          <th>Name</th>
+          <th>Job</th>
+          <th>Cout/h</th>
+          <th>Nombre de tache</th>
+          <th>Nombre de jour travaillé</th>
+          <th>Total heure</th>
+          <th>Cout total</th>
+          <th>action</th>
+      </tr>
+    </thead>
+
+        <tbody id="tabResBoy" >
+          <ng-container *ngFor="let project of ressources.projectRessourceDetail">
+              <tr>
+                  <td>{{project.name}}</td>
+                  <td>{{project.job}}</td>
+                  <td>{{project.ratio}}</td>
+                  <td>{{project.nb_tasks}}</td>
+                  <td>{{project.nb_days}}</td>
+                  <td>{{project.nb_hours}}</td>
+                  <td>{{project.total_cost}}</td>
+                  <td>
+                    <div class="actionRes">
+                        <a (click)="deleteResource(project.id)"><i class="material-icons">delete</i></a>
+                        <!-- <a class="modal-trigger" (click)="openModalResConfirmDel()" href="#modalDeleteRessource"><i class="material-icons">delete</i></a> -->
+
+                        <a (click)="onSelect(project)"><i class="material-icons">edit</i></a>
+                    </div>
+
+                  </td>
+                </tr>
+          </ng-container>
+
+
+
+
+          </tbody>
+
+        </table>
+        <div class="fixed-action-btn horizontal click-to-toggle">
+            <a id="menu" class="btn-floating btn-large red modal-trigger tooltipped"   materialize="tooltip" data-position="left" data-delay="700" data-tooltip="Ajouter une ressouces" (click)="openModal3()" href="#modal3">
+              <i class="material-icons">add</i>
+            </a>
+        </div>
+
+
+
+
+<!-- MODAL ADD RESS-->
+
+<div id="modal3" class="modal modal-fixed-footer" materialize="modal" [materializeParams]="[{dismissible: false}]" [materializeActions]="modalActions3">
+
+    <div class="modal-content">
+        <h4>Creation d'une nouvelle ressource</h4>
+
+        <form id="requestCreateRessource" class="col s12" [formGroup]="formAddRessources" (ngSubmit)="createRessources(formAddRessources.value)">
+
+            <div class="row">
+              <div class="input-field col s12">
+                <input type="text" id="name" class="validate form-control" name="name" formControlName="nameCtrl">
+                <label for="name">Nom de la ressources</label>
+
+                <!-- Validators -->
+                <div *ngIf="nameCtrl.invalid && (nameCtrl.dirty|| nameCtrl.touched)">
+                  <div *ngIf="nameCtrl.errors.required">
+                    Nom de la ressources obligatoire
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="row">
+                <div class="input-field col s12">
+                  <input type="text" id="first_nameCtrl" class="validate form-control" name="first_nameCtrl" formControlName="first_nameCtrl">
+                  <label for="first_nameCtrl">Prénom de la ressouces</label>
+
+                   <!-- Validators -->
+                <div *ngIf="first_nameCtrl.invalid && (first_nameCtrl.dirty|| first_nameCtrl.touched)">
+                    <div *ngIf="first_nameCtrl.errors.required">
+                      prénom de la ressources obligatoire
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="row">
+                  <div class="input-field col s12">
+                    <input type="text" id="ratioCtrl" class="validate form-control" name="ratioCtrl" formControlName="ratioCtrl">
+                    <label for="ratioCtrl">Cout/h</label>
+
+                    <!-- Validators -->
+                    <div *ngIf="ratioCtrl.invalid && (ratioCtrl.dirty|| ratioCtrl.touched)">
+                      <div *ngIf="ratioCtrl.errors.required">
+                        Un cout est obligatoire
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="row">
+                    <div class="input-field col s12">
+                      <input type="text" id="jobCtrl" class="validate form-control" name="jobCtrl" formControlName="jobCtrl">
+                      <label for="jobCtrl">Fonction</label>
+
+                         <!-- Validators -->
+                    <div *ngIf="jobCtrl.invalid && (jobCtrl.dirty|| jobCtrl.touched)">
+                        <div *ngIf="jobCtrl.errors.required">
+                          un job est obligatoire
+                        </div>
+                      </div>
+
+                    </div>
+                  </div>
+
+
+
+
+          </form>
+
+    </div>
+
+
+      <div class="modal-footer">
+          <button class="btn waves-effect waves-light" form="requestCreateRessource" type="submit" [disabled]="formAddRessources.invalid">
+              Creer une ressouces
+            </button>
+        <a class="waves-effect waves-green btn-flat" (click)="closeModal3()">annuler</a>
+
+      </div>
+
+
+    </div>
+
+
+
+
+
+
+<div id="modalEdit" class="modal modal-fixed-footer" materialize="modal" [materializeParams]="[{dismissible: false}]" [materializeActions]="EditRess">
+
+  <div class="modal-content">
+      <h4>Modifier une ressource</h4>
+
+
+      <form id="requestEditRessource" class="col s12" [formGroup]="formEditRessources" (ngSubmit)="updateResource(formEditRessources.value, editRess.id)">
+
+        <div class="row">
+          <div class="input-field col s12">
+            <input type="text" id="name" class="validate form-control" name="name" formControlName="nameCtrl2" placeholder="">
+            <label for="name">Nom de la ressources</label>
+
+            <!-- Validators -->
+            <div *ngIf="nameCtrl2.invalid && (nameCtrl2.dirty|| nameCtrl2.touched)">
+              <div *ngIf="nameCtrl2.errors.required">
+                Nom de la ressources obligatoire
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="input-field col s12">
+            <input type="text" id="ratioCtrl2" class="validate form-control" name="ratioCtrl2" formControlName="ratioCtrl2" placeholder="">
+            <label for="ratioCtrl2">Cout/h</label>
+
+            <!-- Validators -->
+            <div *ngIf="ratioCtrl2.invalid && (ratioCtrl2.dirty|| ratioCtrl2.touched)">
+              <div *ngIf="ratioCtrl2.errors.required">
+                Un cout est obligatoire
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+            <div class="input-field col s12">
+              <input type="text" id="jobCtrl2" class="validate form-control" name="jobCtrl2" formControlName="jobCtrl2" placeholder="">
+              <label for="jobCtrl2">Fonction</label>
+
+                 <!-- Validators -->
+            <div *ngIf="jobCtrl2.invalid && (jobCtrl2.dirty|| jobCtrl2.touched)">
+                <div *ngIf="jobCtrl2.errors.required">
+                  un job est obligatoire
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+
+
+
+      </form>
+
+</div>
+
+
+  <div class="modal-footer">
+      <button class="btn waves-effect waves-light" form="requestEditRessource" type="submit" [disabled]="formEditRessources.invalid">
+          Modifier une ressouces
+        </button>
+    <a class="waves-effect waves-green btn-flat" (click)="closeModalEditRess()">annuler</a>
+
+  </div>
+</div>
+
+
+
+<!-- A DEPLACER DANS FICHIER CSS QUAND TERMINE -->
+  <style>
+table ,tr td{
+}
+
+table{
+    height: 25vh;
+}
+tbody {
+    display:block;
+    height:100%;
+    overflow:auto;
+}
+thead, tbody tr {
+    display:table;
+    width:100%;
+    table-layout:fixed;
+}
+thead {
+    width: 100%;
+}
+
+
+#tabRes{
+  background-color: #ee6e73;
+  color: white
+}
+
+#tabRes tr th {
+  text-align: center!important;
+  font-size: 14px;
+  
+}
+
+#tabRes tr th:last-child {
+text-align: unset!important;
+}
+
+#tabRes tr th {
+border-right: 1px solid white
+}
+
+#tabRes tr th:last-child {
+  border-right: unset
+}
+
+#tabResBoy tr td{
+  text-align: center
+}
+
+#tabResBoy tr td:last-child{
+  text-align: unset
+}
+
+
+.actionRes a:first-child {
+  color: indianred
+}
+
+.actionRes a:last-child{
+  color: cornflowerblue;
+  margin-left: 5px;
+}
+
+.actionRes a {
+  cursor: pointer;
+}
+
+#modalDeleteRessource{
+    max-height: 200px;
+    max-width: 500px;
+}
+
+.contentDelRes{
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+}
+
+.contentDelRes a i {
+  color:black;
+  font-size: 50px;
+}
+.modal-fixed-footer{
+min-height: 80%;
+
+}
+
+  #modal3 .modal-content, #modalEdit .modal-content {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    background-color: whitesmoke;
+    min-height: 100%
+  }
+
+  #modal3 .modal-content h4,  #modalEdit .modal-content h4{
+    font-weight: 200;}
+
+  #modal3 .modal-content form, #modalEdit .modal-content form  {
+    width: 80%;
+  }
+</style>

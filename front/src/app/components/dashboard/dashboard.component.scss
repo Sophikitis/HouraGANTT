@@ -1,0 +1,40 @@
+
+.hidden {
+    visibility: hidden
+}
+
+.visible {
+    visibility: visible;
+}
+div.fond{
+    margin: auto;
+    margin-top: 10px;
+}
+div.inner {
+	margin: auto; 
+	width: 100%;
+}
+
+#offer{
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    .pad{
+        padding: 50px;
+          h4{
+             font-weight: 200;
+         }
+         
+         .head{
+            padding: 5px;
+            margin-right: 10px;
+         }
+         .listFunctions{
+            border-left: 1px solid darkgrey;
+            padding: 20px;
+            margin-left: 10px;
+         }
+    }
+}

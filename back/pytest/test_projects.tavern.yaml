@@ -1,0 +1,120 @@
+test_name: HouraGANTT Project tester
+
+stages:
+  - name: User1 login, save bearer token
+    request:
+      url: http://192.168.33.10/api/login
+      method: POST
+      data:
+        email: lucy@yopmail.com
+        password: Azerty123
+      headers:
+        Content-Type: application/x-www-form-urlencoded
+    response:
+      status_code: 200
+      save:
+        body:
+          access_token_1: access_token
+          user_id_1: user.id
+
+  - name: User2 login, save bearer token and email
+    request:
+      url: http://192.168.33.10/api/login
+      method: POST
+      data:
+        email: j.mrcl@yopmail.com
+        password: Azerty123
+      headers:
+        Content-Type: application/x-www-form-urlencoded
+    response:
+      status_code: 200
+      save:
+        body:
+          access_token_2: access_token
+          user_id_2: user.id
+          user_email_2: user.email
+
+  - name: User3 login, save bearer token
+    request:
+      url: http://192.168.33.10/api/login
+      method: POST
+      data:
+        email: jerem@yopmail.com
+        password: Azerty123
+      headers:
+        Content-Type: application/x-www-form-urlencoded
+    response:
+      status_code: 200
+      save:
+        body:
+          access_token_3: access_token
+          user_id_3: user.id
+
+  - name: User1 creates project1
+    request: 
+      url: http://192.168.33.10/api/projects
+      method: POST
+      data:
+        name: tavern
+        duration_days: 123
+        description: idk
+        link: somelink
+        billing: some billing
+        user_id: "{user_id_1}"
+      headers: &default_headers_1
+        Content-Type: application/x-www-form-urlencoded
+        Authorization: "Bearer {access_token_1}"
+    response:
+      status_code: 200
+      save:
+        body:
+          project_id_1: data.id
+
+  - name: User1 invites User2 on the project
+    request: 
+      url: http://192.168.33.10/api/projects/{project_id_1}/invite
+      method: POST
+      data:
+        user_email: "{user_email_2}"
+      headers: *default_headers_1
+    response:
+      status_code: 200
+
+  - name: User2 access to project he's been invited in
+    request:
+      url: http://192.168.33.10/api/projects/{project_id_1}
+      method: GET
+      headers: &default_headers_2
+          Content-Type: application/x-www-form-urlencoded
+          Authorization: "Bearer {access_token_2}"
+    response:
+      status_code: 200
+
+  - name: User2 access project with wrong token
+    request:
+      url: http://192.168.33.10/api/projects/{project_id_1}
+      method: GET
+      headers:
+        Content-Type: application/x-www-form-urlencoded
+        Authorization: "Bearer fakebearer"
+    response:
+      status_code: 200
+      body:
+        status_code: 403
+
+  - name: User3 cannot acces this project 
+    request:
+      url: http://192.168.33.10/api/projects/{project_id_1}
+      method: GET
+      headers: &default_headers_3
+          Content-Type: application/x-www-form-urlencoded
+          Authorization: "Bearer {access_token_3}"
+    response:
+      status_code: 200
+      body:
+        status_code: 401
+
+
+
+ 
+

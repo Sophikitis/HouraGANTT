@@ -1,0 +1,326 @@
+<div class="gantt-container" style="height: 70vh;">
+
+  <div #gantt_here class="gantt-container-inner" style="height: 100%;">
+  </div>
+
+
+  <div id="btnMenuGantt" class="fixed-action-btn horizontal click-to-toggle">
+    <a id="menu" class="btn-floating btn-large red tooltipped"   materialize="tooltip" data-position="top" data-delay="700" data-tooltip="Menu Gantt">
+      <i class="material-icons">menu</i>
+    </a>
+    <ul>
+      <li><a class="btn-floating red modal-trigger tooltipped"   materialize="tooltip" data-position="top" data-delay="50" data-tooltip="Informations projet" (click)="openModal2()" href="#modal2"><i class="material-icons">info</i></a></li>
+      <li><a class="btn-floating yellow darken-1 tooltipped"   materialize="tooltip" data-position="bottom" data-delay="50" data-tooltip="Exporter" (click)="dashboard.requestExportPdf(dashboard.currentProject.id)"><i class="material-icons">insert_chart</i></a></li>
+      <!-- <li><a class="btn-floating green"><i class="material-icons">publish</i></a></li> -->
+      <li><a class="btn-floating green modal-trigger tooltipped"   materialize="tooltip" data-position="top" data-delay="50" data-tooltip="Inviter quelqu'un" (click)="openModal4()" href="#modal4"><i class="material-icons">face</i></a></li>
+      <li><a class="btn-floating orange modal-trigger tooltipped"   materialize="tooltip" data-position="top" data-delay="50" data-tooltip="Modifier le projet" (click)="onSelectEditProject(dashboard.currentProject)"><i class="material-icons">update</i></a></li>
+      <li><a class="btn-floating blue modal-trigger tooltipped"   materialize="tooltip" data-position="top" data-delay="50" data-tooltip="Supprimer le projet" (click)="openModaDeleteProject()"><i class="material-icons">delete</i></a></li>
+      <li><a class="btn-floating  green darken-1 modal-trigger tooltipped"   materialize="tooltip" data-position="bottom" data-delay="50" data-tooltip="Ajouter un projet" (click)="openModal()" href="#modal1"><i class="material-icons">add</i></a></li>
+    </ul>
+  </div>
+</div>
+
+<!-- MODALS -->
+
+<!-- Modal Add Project -->
+<div id="modal1" class="modal modal-fixed-footer" materialize="modal" [materializeParams]="[{dismissible: false}]" [materializeActions]="modalActions">
+
+    <div class="modal-content">
+        <h4>Creation d'un nouveau projet</h4>
+
+        <div class="col s6 m6 l6 formRegister ">
+            <div class="row">
+                <form id="requestCreateProject" class="col s12" [formGroup]="formAddProject" (ngSubmit)="createProject(formAddProject.value)">
+
+                  <div class="row">
+                    <div class="input-field col s12">
+                      <input type="text" id="name" class="validate form-control" name="name" formControlName="nameCtrl">
+                      <label for="name">Nom du projet</label>
+
+                      <!-- Validators -->
+                      <div *ngIf="nameCtrl.invalid && (nameCtrl.dirty|| nameCtrl.touched)">
+                        <div *ngIf="nameCtrl.errors.required">
+                          votre nom est obligatoire
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="row">
+                      <div class="input-field col s12">
+                        <input type="text" id="description" class="validate form-control" name="description" formControlName="descriptionCtrl">
+                        <label for="description">description du projet</label>
+
+
+                      </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="input-field col s12">
+                          <input type="text" id="duration_days" class="validate form-control" name="duration_days" formControlName="duration_daysCtrl">
+                          <label for="duration_days">Durée du projet</label>
+
+
+
+
+
+                          <!-- Validators -->
+                          <div *ngIf="duration_daysCtrl.invalid && (duration_daysCtrl.dirty|| duration_daysCtrl.touched)">
+                            <div *ngIf="duration_daysCtrl.errors.required">
+                              Une durée est obligatoire
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div class="row">
+                          <div class="input-field col s12">
+                            <input type="text" id="links" class="validate form-control" name="links" formControlName="linksCtrl">
+                            <label for="links">Lien du projet</label>
+
+
+                          </div>
+                        </div>
+
+
+
+
+                </form>
+            </div>
+        </div>
+
+      </div>
+      <div class="modal-footer">
+          <button class="btn waves-effect waves-light" form="requestCreateProject" type="submit" [disabled]="formAddProject.invalid">
+              Creer un projet
+            </button>
+        <a class="waves-effect waves-green btn-flat" (click)="closeModal()">annuler</a>
+        <!-- <a class="modal-action modal-close waves-effect waves-green btn-flat">Agree</a> -->
+
+      </div>
+    </div>
+
+    <!-- Modal Informations project -->
+    <div id="modal2" class="modal modal-fixed-footer" materialize="modal" [materializeParams]="[{dismissible: false}]" [materializeActions]="modalActions2" *ngIf="dashboard.selectedProject">
+
+        <div class="modal-content">
+
+
+            <div class="row">
+                <div class="col s12 m12">
+                  <div class="card blue-grey darken-1">
+                    <div class="card-content white-text">
+                      <span class="card-title">{{dashboard.currentProject.name}}</span>
+                      <p>{{dashboard.currentProject.description}}</p>
+                      <p> durée du projet : {{dashboard.currentProject.duration_days}} jour(s)</p>
+                    </div>
+                    <div class="card-action">
+                      <a href="{{dashboard.currentProject.link}}">Site du projet</a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+          </div>
+          <div class="modal-footer">
+            <a class="waves-effect waves-green btn-flat" (click)="closeModal2()">annuler</a>
+            <!-- <a class="modal-action modal-close waves-effect waves-green btn-flat">Agree</a> -->
+
+          </div>
+        </div>
+
+<!-- MODAL EDIT PROJECT -->
+<div id="modalEditProject" class="modal modal-fixed-footer" materialize="modal" [materializeParams]="[{dismissible: false}]" [materializeActions]="EditProject">
+
+    <div class="modal-content">
+        <h4>Modifier une ressource</h4>
+  
+  
+        <form id="requestEditProject" class="col s12 formEdit " [formGroup]="formEditProject" (ngSubmit)="updateProject(formEditProject.value)">
+  
+          <div class="row">
+            <div class="input-field col s12">
+              <input type="text" id="name" class="validate form-control" name="name" formControlName="nameCtrl2" placeholder="">
+              <label for="name">Nom du projet</label>
+  
+              <!-- Validators -->
+              <div *ngIf="nameCtrl2.invalid && (nameCtrl2.dirty|| nameCtrl2.touched)">
+                <div *ngIf="nameCtrl2.errors.required">
+                  Nom du projet est obligatoire
+                </div>
+              </div>
+            </div>
+          </div>
+  
+          <div class="row">
+            <div class="input-field col s12">
+              <input type="text" id="descriptionCtrl2" class="validate form-control" name="descriptionCtrl2" formControlName="descriptionCtrl2" placeholder="">
+              <label for="descriptionCtrl">Description</label>
+  
+          
+            </div>
+          </div>
+  
+          <div class="row">
+              <div class="input-field col s12">
+                <input type="text" id="duration_daysCtrl2" class="validate form-control" name="duration_daysCtrl2" formControlName="duration_daysCtrl2" placeholder="">
+                <label for="duration_daysCtrl2">Durée du projet</label>
+  
+                   <!-- Validators -->
+              <div *ngIf="duration_daysCtrl2.invalid && (duration_daysCtrl2.dirty|| duration_daysCtrl2.touched)">
+                  <div *ngIf="duration_daysCtrl2.errors.required">
+                    Une durée de projet est obligatoire
+                  </div>
+                </div>
+  
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="input-field col s12">
+                <input type="text" id="linksCtrl2" class="validate form-control" name="linksCtrl2" formControlName="linksCtrl2" placeholder="">
+                <label for="linksCtrl2">Lien du projet</label>
+
+  
+              </div>
+            </div>
+  
+  
+  
+  
+        </form>
+  
+  </div>
+  
+  
+    <div class="modal-footer">
+        <button class="btn waves-effect waves-light" form="requestEditProject" type="submit" [disabled]="formEditProject.invalid">
+            Modifier une ressouces
+          </button>
+      <a class="waves-effect waves-green btn-flat" (click)="closeModalEditProject()">annuler</a>
+  
+    </div>
+  </div>
+
+                  
+        <!-- Modal invite user -->
+        <div id="modal4" class="modal modal-fixed-footer" materialize="modal" [materializeParams]="[{dismissible: false}]" [materializeActions]="modalAction4" >
+
+        <div class="modal-content">
+          <div class="row formRegister">
+            <form id="requestInvite" class="col s12" [formGroup]="formInvite" (ngSubmit)="invite(formInvite.value)">
+            <div class="row">
+                    <div class="input-field col s12">
+                      <input id="user_email" type="user_email" class="validate form-control" name="user_email" formControlName="emailCtrl" >
+                      <label for="user_email" style="padding-top: 20px;">Email de votre invité</label>
+
+                      <!-- Validators -->
+                      <div *ngIf="emailCtrl.invalid && (emailCtrl.dirty || emailCtrl.touched)">
+                        <div *ngIf="emailCtrl.errors.required" class="fieldInvalid">
+                            Merci de saisir une adresse email.
+                        </div>
+
+                        <div *ngIf="emailCtrl.errors.pattern" class="fieldInvalid">
+                            Adresse email incorrect.
+                        </div> 
+                      </div>
+                    </div>
+              </div>
+              </form>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button class="btn waves-effect waves-light" form="requestInvite" type="submit" [disabled]="formInvite.invalid">
+              Inviter
+            </button>
+            <a class="waves-effect waves-green btn-flat" (click)="closeModal4()">annuler</a>
+            <!-- <a class="modal-action modal-close waves-effect waves-green btn-flat">Agree</a> -->
+          </div>
+        </div>
+
+
+
+
+        <!-- MODAL EDIT PROJECT -->
+        <div id="ModalConfirmationDelete" class="modal modal-fixed-footer center valign-wrapper center-align" materialize="modal" [materializeParams]="[{dismissible: false}]" [materializeActions]="confirmDeleteProject">
+
+            <div class="modal-content center-align valign-wrapper ">
+                  <h5>Confirmer la suppression du projet :<br> {{dashboard.currentProject.name}} ?</h5>
+
+                  <div class="modal-footer">
+                      <div class="grpBtnValid">
+                          <button class="btn waves-effect waves-light" (click)="deleteProject()">
+                              Oui
+                            </button>
+                          <a class="waves-effect waves-green btn-flat" (click)="closeModalDeleteProject()">annuler</a>
+                      </div>
+                      
+                  </div>
+  
+
+            </div>
+          
+            
+ 
+          </div>
+
+
+
+<style>
+  #ModalConfirmationDelete{
+    justify-content: center;
+    align-items: center;
+    background-color: whitesmoke;
+    height: 25%!important;
+    top:50% !important;
+    width: 40%;
+    min-width: 40%;
+    min-height: 30%;
+
+}
+
+  #ModalConfirmationDelete .modal-content{
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    padding: 10px;
+    display: flex
+  }
+    
+  #ModalConfirmationDelete .modal-content h5 {
+
+      font-weight: 200;
+    color: darkslategray;
+    }
+
+
+
+  #btnMenuGantt{
+
+    position: relative;
+    bottom: 100px;
+    text-align: right
+  }
+  .modal-fixed-footer{
+min-height: 80%;
+
+}
+
+  #modal1 .modal-content, #modalEditProject .modal-content {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    background-color: whitesmoke;
+    min-height: 100%
+  }
+
+  #modal1 .modal-content h4,  #modalEditProject .modal-content h4{
+    font-weight: 200;}
+
+  #modal1 .modal-content .formRegister, #modalEditProject .modal-content .formEdit  {
+    width: 80%;
+  }
+
+
+</style>
