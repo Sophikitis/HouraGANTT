@@ -1,4 +1,4 @@
-[![Angular Logo](./logo-angular.jpg)](https://angular.io/) [![Electron Logo](./logo-electron.jpg)](https://electron.atom.io/)
+[![Angular Logo](./front/logo-angular.jpg)](https://angular.io/) [![Electron Logo](./front/logo-electron.jpg)](https://electron.atom.io/)
 
 [![Travis Build Status][build-badge]][build]
 [![Dependencies Status][dependencyci-badge]][dependencyci]
